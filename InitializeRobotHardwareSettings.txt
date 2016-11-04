@@ -1,0 +1,105 @@
+package org.firstinspires.ftc.teamcode;
+
+import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.util.ElapsedTime;
+
+/*
+ * This class can be used to define all the specific hardware for a single robot.
+ * In this case that robot is a Pushbot.
+ * See PushbotTeleopTank_Iterative and others classes starting with "Pushbot" for usage examples.
+ *
+ * Motor channel:  Left  drive motor:        "left_drive"
+ * Motor channel:  Right drive motor:        "right_drive"
+ * Motor channel:  Manipulator drive motor:  "left_arm"
+ * Servo channel:  Servo to open left claw:  "left_hand"
+ * Servo channel:  Servo to open right claw: "right_hand"
+ */
+public class InitializeRobotHardwareSettings
+{
+    /* Public OpMode members. */
+    public DcMotor  leftMotor   = null;
+    public DcMotor  rightMotor  = null;
+
+    //Commenting out all settings related to arm
+    /*
+    public DcMotor  armMotor    = null;
+    public Servo    leftClaw    = null;
+    public Servo    rightClaw   = null;
+
+   //Do not worry about servo for now
+    public static final double MID_SERVO       =  0.5 ;
+    public static final double ARM_UP_POWER    =  0.45 ;
+    public static final double ARM_DOWN_POWER  = -0.45 ;
+
+  */
+    /* local OpMode members. */
+    HardwareMap hwMap           =  null;
+    private ElapsedTime period  = new ElapsedTime();
+
+    /* Constructor */
+    public InitializeRobotHardwareSettings(){
+
+    }
+
+    /* Initialize standard Hardware interfaces */
+    public void init(HardwareMap hardwareMap) {
+        // Save reference to Hardware map
+        hwMap = hardwareMap;
+
+        // Initialize motor
+        leftMotor   = hwMap.dcMotor.get("left_drive");
+        rightMotor  = hwMap.dcMotor.get("right_drive");
+
+        //Initialize Arms. Currently we do not have one and I am commenting out the code. Sriram 10162016
+        //armMotor    = hwMap.dcMotor.get("left_arm");
+
+        // Since we are using AndyMark motors, the settings need to be reverse of the regular
+        leftMotor.setDirection(DcMotor.Direction.FORWARD); // Set to REVERSE if using AndyMark motors
+        rightMotor.setDirection(DcMotor.Direction.REVERSE);// Set to FORWARD if using AndyMark motors
+
+        // Set all motors to zero power
+        leftMotor.setPower(0);
+        rightMotor.setPower(0);
+
+        //Set Arm power to Zero. Currently we do not have one and I am commenting out the code. Sriram 10162016
+        //armMotor.setPower(0);
+
+        // These are left and right motor settings
+        // For now we will try and run without encoders. To run with encoders, change the constant value to RUN_WITH_ENCODER
+        leftMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        rightMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
+        //Comment out arm motor. Currently we do not have one and I am commenting out the code. Sriram 10162016
+        //armMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
+        // Define and initialize ALL installed servos. Currently we do not have any servos. So I am commenting this out. Sriram 10162014
+        /*
+        leftClaw = hwMap.servo.get("left_hand");
+        rightClaw = hwMap.servo.get("right_hand");
+        leftClaw.setPosition(MID_SERVO);
+        rightClaw.setPosition(MID_SERVO);
+        */
+    }
+
+    /***
+     *
+     * waitForTick implements a periodic delay. However, this acts like a metronome with a regular
+     * periodic tick.  This is used to compensate for varying processing times for each cycle.
+     * The function looks at the elapsed cycle time, and sleeps for the remaining time interval.
+     */
+    public void waitForTick(long periodMs) throws InterruptedException {
+
+        long  remaining = periodMs - (long)period.milliseconds();
+
+        // sleep for the remaining portion of the regular cycle period.
+        if (remaining > 0)
+            Thread.sleep(remaining);
+
+        // Reset the cycle clock for the next pass.
+        period.reset();
+    }
+}
+

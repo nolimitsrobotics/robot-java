@@ -1,0 +1,45 @@
+/*
+
+*/
+package org.firstinspires.ftc.teamcode;
+
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.LightSensor;
+import com.qualcomm.robotcore.hardware.OpticalDistanceSensor;
+
+import org.firstinspires.ftc.teamcode.InitializeRobotHardwareSettings;
+
+@Autonomous(name="Pushbot: NoLimits", group="Pushbot")
+
+public class DriveTheRobotAlongPredeterminedPath extends LinearOpMode {
+
+    /* Declare OpMode members. */
+    InitializeRobotHardwareSettings robot   = new InitializeRobotHardwareSettings();   // Use our hardware object
+    @Override
+    public void runOpMode() throws InterruptedException {
+        robot.init(hardwareMap);
+        // Send telemetry message to signify robot waiting;
+        telemetry.addData("Status", "Ready to run");    //
+        telemetry.update();
+        //Move the Robot Forward
+        robotDoSomething(1,1,1000);
+        //Turn Robot Left
+        robotDoSomething(-1,1,1000);
+        //Move the Robot Forward
+        robotDoSomething(.5,.5,1000);
+        //I have reached the white line and hence turn Robot Left
+        robotDoSomething(-.5,.5,1000);
+        // Stop the Robot
+        robotDoSomething(0,0,1000);
+    }
+
+    private void robotDoSomething(double leftPower, double rightPower, long sleepTime ) throws InterruptedException {
+        // Stop all motors
+        robot.leftMotor.setPower(leftPower);
+        robot.rightMotor.setPower(rightPower);
+        Thread.sleep(sleepTime);
+    }
+
+}
